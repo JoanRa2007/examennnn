@@ -13,10 +13,34 @@ class CitaRepositoryFake(reloj: Reloj) : CitaRepository {
     private val semilla = CitasSimuladas.crear(reloj)
     private val citas = semilla.citas.toMutableList()
 
-    override suspend fun obtenerPaciente(): Paciente { delay(800); return semilla.paciente }
-    override suspend fun obtenerCatalogo(): CatalogoCitas { delay(800); return semilla.catalogo }    override suspend fun obtenerCitas(): List<Cita> { delay(800); return mutex.withLock { citas.toList() } }
-    override suspend fun obtenerCita(id: Long): Cita? { delay(800); return mutex.withLock { citas.firstOrNull { it.id == id } } }
-    override suspend fun guardarCita(cita: Cita): Cita { delay(350); return mutex.withLock { citas += cita; cita } }
+    override suspend fun obtenerPaciente(): Paciente {
+        delay(800)
+        return semilla.paciente
+    }
+
+    override suspend fun obtenerCatalogo(): CatalogoCitas {
+        delay(800)
+        return semilla.catalogo
+    }
+
+    override suspend fun obtenerCitas(): List<Cita> {
+        delay(800)
+        return mutex.withLock { citas.toList() }
+    }
+
+    override suspend fun obtenerCita(id: Long): Cita? {
+        delay(800)
+        return mutex.withLock { citas.firstOrNull { it.id == id } }
+    }
+
+    override suspend fun guardarCita(cita: Cita): Cita {
+        delay(350)
+        return mutex.withLock {
+            citas += cita
+            cita
+        }
+    }
+
     override suspend fun actualizarCita(cita: Cita): Cita {
         delay(350)
         return mutex.withLock {
